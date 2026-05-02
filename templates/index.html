@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures & Algorithms Visualizer - Group E</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DATA STRUCTURES & ALGORITHMS VISUALIZER</h1>
+            <p>Ever wondered what really happens inside an algorithm?</p>
+            <p>Look up here >>> Crafted by Group E ,,, Where Collaboration Meets Computational Excellence @2026</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('ds')">Data Structures</button>
+            <button class="tab-btn" onclick="showTab('sorting')">Sorting</button>
+            <button class="tab-btn" onclick="showTab('searching')">Searching</button>
+            <button class="tab-btn" onclick="showTab('bst')">Binary Search Tree</button>
+            <button class="tab-btn" onclick="showTab('hanoi')">Tower of Hanoi</button>
+            <button class="tab-btn" onclick="showTab('graph')">Graphs</button>
+            <button class="tab-btn" onclick="showTab('hashtable')">Hash Table</button>
+        </div>
+
+        <!-- Data Structures Tab -->
+        <div id="ds-tab" class="tab-content active">
+            <div class="selector">
+                <label>Select Data Structure:</label>
+                <select id="ds-select" onchange="updateDSOperations()">
+                    <optgroup label="Stacks">
+                        <option value="stack_array">Stack (Array)</option>
+                        <option value="stack_linked">Stack (Linked List)</option>
+                    </optgroup>
+                    <optgroup label="Queues">
+                        <option value="queue_array">Queue (Array)</option>
+                        <option value="queue_linked">Queue (Linked List)</option>
+                    </optgroup>
+                    <optgroup label="Linked Lists">
+                        <option value="singly_linked_list">Singly Linked List</option>
+                        <option value="doubly_linked_list">Doubly Linked List</option>
+                    </optgroup>
+                    <!-- ADDED: Min Heap and Max Heap -->
+                    <optgroup label="Heaps">
+                        <option value="min_heap">Min Heap</option>
+                        <option value="max_heap">Max Heap</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div id="ds-operations" class="operations-panel"></div>
+
+            <div class="visualization">
+                <h3>Data Structure Showcase</h3>
+                <div id="ds-visualization" class="data-visualization"></div>
+                <div id="ds-performance" style="margin-top:15px; font-size:0.95em; color:#555;"></div>
+            </div>
+        </div>
+
+        <!-- Sorting Tab -->
+        <div id="sorting-tab" class="tab-content">
+            <div class="input-group">
+                <label>Enter numbers (comma separated):</label>
+                <input type="text" id="sort-input">
+            </div>
+            <div class="selector">
+                <label>Select Sorting Algorithm:</label>
+                <select id="sort-algorithm">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                </select>
+            </div>
+            <button onclick="executeSortWithMetrics()" class="btn-primary">Let's Sort</button>
+
+            <div class="visualization">
+                <h3>Sorting Visualization</h3>
+                <div id="array-container" class="array-container"></div>
+                <div id="sort-result" class="result-panel"></div>
+            </div>
+        </div>
+
+        <!-- Searching Tab -->
+        <div id="searching-tab" class="tab-content">
+            <div class="input-group">
+                <label>Enter numbers (comma separated):</label>
+                <input type="text" id="search-input" placeholder="10, 5, 8, 3, 12">
+            </div>
+            <div class="input-group">
+                <label>Target Value:</label>
+                <input type="number" id="search-target">
+            </div>
+            <div class="selector">
+                <label>Select Search Algorithm:</label>
+                <select id="search-algorithm">
+                    <option value="linear">Linear Search</option>
+                    <option value="binary">Binary Search</option>
+                    <!-- ADDED: Interpolation Search -->
+                    <option value="interpolation">Interpolation Search</option>
+                </select>
+            </div>
+            <button onclick="executeSearch()" class="btn-primary">Let's Search</button>
+
+            <div class="visualization">
+                <h3>Search Visualization</h3>
+                <div id="search-container" class="array-container"></div>
+                <div id="search-result" class="result-panel"></div>
+            </div>
+        </div>
+
+        <!-- Binary Search Tree Tab -->
+        <div id="bst-tab" class="tab-content">
+            <div class="input-group">
+                <label>Insert Value:</label>
+                <input type="number" id="bst-input" placeholder="Enter number">
+            </div>
+            <button onclick="insertBST()" class="btn-primary">Insert into BST</button>
+            <button onclick="resetBST()" class="btn-primary" style="background:#f44336;">Reset Tree</button>
+
+            <div class="visualization">
+                <h3>Binary Search Tree Visualization</h3>
+                <div id="bst-canvas" style="height:400px; background:#f8f9fa; border-radius:12px; position:relative;"></div>
+                <div id="bst-performance" style="margin-top:10px;"></div>
+            </div>
+        </div>
+
+        <!-- Tower of Hanoi Tab -->
+        <div id="hanoi-tab" class="tab-content">
+            <h2 style="text-align:center; margin-bottom:20px;">Tower of Hanoi</h2>
+
+            <div style="text-align:center; margin-bottom:25px;">
+                <label>Number of Disks: </label>
+                <input type="number" id="hanoi-disks" value="4" min="1" max="7" style="width:80px; padding:8px; font-size:1.1em;">
+                <button onclick="startHanoiVisualization()" class="btn-primary" style="margin-left:20px; padding:12px 30px;">
+                    Start Animation
+                </button>
+                <button onclick="resetHanoi()" class="btn-primary" style="background:#f44336; margin-left:10px;">
+                    Reset
+                </button>
+            </div>
+
+            <div class="visualization">
+                <h3 style="text-align:center;">Let's Visualize</h3>
+                <div id="hanoi-visual" style="display:flex; justify-content:center; gap:80px; margin:40px 0; flex-wrap:wrap;"></div>
+                <div id="hanoi-status" style="text-align:center; font-size:1.2em; font-weight:bold; margin-top:15px; color:#667eea;"></div>
+            </div>
+        </div>
+
+        <!-- Graphs Tab -->
+        <div id="graph-tab" class="tab-content">
+            <h2>Graph Visualization</h2>
+
+            <div style="margin-bottom:20px;">
+                <button onclick="createNewGraph(false)" class="btn-primary">New Undirected Graph</button>
+                <button onclick="createNewGraph(true)" class="btn-primary">New Directed Graph</button>
+            </div>
+
+            <div class="input-group" style="display:flex; gap:10px; align-items:center;">
+                <input type="text" id="edge-from" placeholder="From" style="width:100px">
+                <input type="text" id="edge-to" placeholder="To" style="width:100px">
+                <input type="number" id="edge-weight" value="1" style="width:80px">
+                <button onclick="addGraphEdge()" class="btn-primary">Add Edge</button>
+                <button onclick="clearGraph()" class="btn-primary" style="background:#f44336;">Clear</button>
+            </div>
+
+            <div class="visualization">
+                <h3>Graph Operations</h3>
+                <button onclick="runBFS()" class="btn-operation">BFS</button>
+                <button onclick="runDFS()" class="btn-operation">DFS</button>
+                <button onclick="runShortestPath()" class="btn-operation">Shortest Path</button>
+
+                <div id="graph-result" class="result-panel" style="margin-top:20px;"></div>
+                <div id="graph-display" style="margin-top:20px; background:#f8f9fa; padding:15px; border-radius:10px; white-space:pre-wrap;"></div>
+
+                <div class="visualization">
+                    <h3>Live Graph Visualization</h3>
+                    <canvas id="graph-canvas" width="850" height="520" style="border:2px solid #ddd; border-radius:12px; background:#f8f9fa;"></canvas>
+                    <div id="graph-info" style="margin-top:15px; font-size:0.95em;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hash Table Tab -->
+        <div id="hashtable-tab" class="tab-content">
+            <h2>Hash Table Visualizer</h2>
+
+            <div class="selector" style="margin-bottom:25px;">
+                <label for="hash-method">Select Hash Function:</label>
+                <select id="hash-method" onchange="changeHashMethod()">
+                    <option value="division">Division Method</option>
+                    <option value="mid_square">Mid-Square Method</option>
+                    <option value="truncation">Truncation Method</option>
+                    <option value="folding">Folding Method</option>
+                    <option value="multiplication">Multiplication Method</option>
+                </select>
+            </div>
+
+            <div class="input-group" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="hash-key" placeholder="Key (e.g. name or number)" style="width:220px;">
+                <input type="text" id="hash-value" placeholder="Value" style="width:180px;">
+                <button onclick="insertHash()" class="btn-primary">Insert</button>
+                <button onclick="getHash()" class="btn-primary">Get</button>
+                <button onclick="deleteHash()" class="btn-primary" style="background:#f44336;">Delete</button>
+                <button onclick="clearHashTable()" class="btn-primary" style="background:#666;">Clear Table</button>
+            </div>
+
+            <div class="visualization" style="margin-top:30px;">
+                <h3>Hash Table Visualization</h3>
+                <div id="hash-visualization" style="background:#f8f9fa; padding:20px; border-radius:12px; min-height:300px;"></div>
+                <div id="hash-performance" style="margin-top:15px; font-size:0.95em; color:#555;"></div>
+            </div>
+
+            <div class="result-panel" style="margin-top:20px;">
+                <h3>Current Status</h3>
+                <div id="hash-info" style="background:#e8f5e9; padding:15px; border-radius:8px;"></div>
+            </div>
+        </div>
+
+    </div><!-- end .container -->
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
